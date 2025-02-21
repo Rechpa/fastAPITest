@@ -17,6 +17,11 @@ def get_db():
         yield db
     finally:
         db.close()
+        
+@app.get("/")
+def read_root():
+    return {"hello":"achref"}
+
 
 @app.post("/users/", response_model=User)
 def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):

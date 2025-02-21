@@ -14,10 +14,11 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: farahdiouani/fastapi-postgres-crud:latest  
+          image: fastapi-postgres-crud:3
+          imagePullPolicy: Never
           env:
             - name: SQLALCHEMY_DATABASE_URL
-              value: "postgresql://postgres:password@192.168.1.140:5432/mydatabase"
+              value: "postgresql://postgres:password@postgres:5432/mydatabase"
           ports:
             - containerPort: 80
 ---

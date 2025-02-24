@@ -1,8 +1,0 @@
-fastapi2:
-  enabled: true
-  image:
-    repository: farahdiouani/fastapi-postgres-crud  
-    tag: latest
-  service:
-    type: NodePort
-    port: 80

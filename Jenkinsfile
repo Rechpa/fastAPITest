@@ -5,8 +5,6 @@ pipeline {
         SONARQUBE_ENV = 'SonarQube'
         NEXUS_CREDENTIALS_ID = 'deploymentRepo'
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
-        registry = "farahdiouani/fastapi-postgres-crud"
-        registryCredential = 'docker-hub-credentials'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         IMAGE_NAME = "fastapi-postgres-crud"
     }
@@ -23,26 +21,22 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image...'
-                    sh 'docker --version'
-                    sh "docker build -t ${registry}:${IMAGE_TAG} . || exit 1"
+                    sh 'docker build -t fastapi-postgres-crud:5 .'
                 }
             }
         }
     }
 
     post {
-        always {
-            echo 'Pipeline execution completed.'
-        }
         success {
-            echo 'Build and push finished successfully!'
+            echo 'Docker build completed successfully!'
         }
         failure {
-            echo 'Build failed!'
+            echo 'Docker build failed!'
         }
     }
 }

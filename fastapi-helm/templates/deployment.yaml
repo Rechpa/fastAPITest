@@ -18,6 +18,9 @@ spec:
           imagePullPolicy: Never
           env:
             - name: SQLALCHEMY_DATABASE_URL
-              value: "postgresql://postgres:fMMVTZmiwh@my-release-postgresql:5432/postgres"
+              value: "postgresql://postgres:$(POSTGRES_PASSWORD)@my-release-postgresql:5432/postgres"
+          envFrom:
+            - secretRef:
+                name: postgres-secret
           ports:
             - containerPort: 80

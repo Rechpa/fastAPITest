@@ -52,12 +52,13 @@ pipeline {
                 }
             }
         }
-        stage('Deploy with Helm') {
+     stage('Deploy with Helm') {
     steps {
         script {
-            echo 'Deploying application with Helm...'
+            echo 'Setting Minikube environment...'
             sh 'eval $(minikube docker-env)'
 
+            echo 'Deploying with Helm...'
             def helmList = sh(script: 'helm list -q | grep "^fastapi2$"', returnStatus: true)
             if (helmList == 0) {
                 echo "Helm release exists. Upgrading..."
@@ -71,6 +72,7 @@ pipeline {
         }
     }
 }
+
 
 
     

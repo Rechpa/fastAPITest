@@ -1,14 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        SONARQUBE_ENV = 'SonarQube'
-        NEXUS_CREDENTIALS_ID = 'deploymentRepo'
-        DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
-        IMAGE_NAME = "fastapi-postgres-crud"
-    }
-
     stages {
         stage('Checkout') {
             steps {

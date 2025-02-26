@@ -52,27 +52,31 @@ pipeline {
                 }
             }
         }
-
         stage('Deploy with Helm') {
-            steps {
-                script {
-                    echo 'Deploying with Helm...'
+    steps {
+        script {
+            echo 'Deploying application with Helm...'
+            sh 'eval $(minikube docker-env)'
 
-                    // Fix: Escape $ sign correctly
-                    def helmList = sh(script: 'helm list -q | grep "^fastapi2\\$"', returnStatus: true)
-
-                    if (helmList == 0) {
-                        echo "Helm release exists. Upgrading..."
-                        sh "helm upgrade fastapi2 fastapi-helm"
-                    } else {
-                        echo "Helm release does not exist. Installing..."
-                        sh "helm install fastapi2 fastapi-helm"
-                    }
-
-                    echo 'Helm deployment completed.'
-                }
+            def helmList = sh(script: 'helm list -q | grep "^fastapi2$"', returnStatus: true)
+            if (helmList == 0) {
+                echo "Helm release exists. Upgrading..."
+                sh "helm upgrade fastapi2 fastapi-helm --set image.tag=${IMAGE_TAG}"
+            } else {
+                echo "Helm release does not exist. Installing..."
+                sh "helm install fastapi2 fastapi-helm --set image.tag=${IMAGE_TAG}"
             }
+
+            echo 'Helm deployment completed.'
         }
+    }
+}
+
+
+    
+
+        
+
     }
 
     post {

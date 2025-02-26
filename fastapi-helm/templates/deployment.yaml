@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: fastapi2
-          image: fastapi-postgres-crud:5
-          imagePullPolicy: Never
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
           env:
             - name: SQLALCHEMY_DATABASE_URL
               value: "postgresql://postgres:$(POSTGRES_PASSWORD)@my-release-postgresql:5432/postgres"

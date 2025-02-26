@@ -7,3 +7,7 @@ service:
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 80
 
+image:
+  repository: "farahdiouani/fastapi-postgres-crud"
+  tag: "latest"  # This will be overridden in Jenkins
+

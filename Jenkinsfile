@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_ENV = 'SonarQube'  // SonarQube environment name
-        NEXUS_CREDENTIALS_ID = 'deploymentRepo'  // Nexus credentials ID in Jenkins
+        SONARQUBE_ENV = 'SonarQube'
+        NEXUS_CREDENTIALS_ID = 'deploymentRepo'
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         registry = "farahdiouani/fastapi-postgres-crud"
         registryCredential = 'docker-hub-credentials'
@@ -14,25 +14,32 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Rechpa/fastAPITest.git'
+                script {
+                    echo 'Checking out code...'
+                    git branch: 'main',
+                        url: 'https://github.com/Rechpa/fastAPITest.git'
+                    echo 'Checkout completed.'
+                }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image...'
-                    sh "docker build -t ${registry}:${IMAGE_TAG} ."
+                    sh 'docker --version'
+                    sh "docker build -t ${registry}:${IMAGE_TAG} . || exit 1"
                 }
-                echo 'Docker Build stage completed.'
             }
         }
     }
 
     post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
         success {
-            echo 'Build finished successfully!'
+            echo 'Build and push finished successfully!'
         }
         failure {
             echo 'Build failed!'

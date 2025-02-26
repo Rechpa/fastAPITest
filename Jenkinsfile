@@ -5,7 +5,7 @@ pipeline {
         registry = "farahdiouani/fastapi-postgres-crud"
         IMAGE_TAG = "${env.BUILD_NUMBER}" // Use Jenkins build number as tag
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
-        KUBE_CONFIG = credentials('mykubeconfig') // Use Kubernetes credentials
+        KUBE_CONFIG = credentials('mykubeconfig') // Kubernetes credentials
     }
 
     stages {
@@ -57,16 +57,7 @@ pipeline {
                 script {
                     echo 'Deploying with Helm...'
                     withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-                        // Check if Helm release exists
-                        def helmCheck = sh(script: "helm list -q | grep -w fastapi2 || true", returnStdout: true).trim()
-                        
-                        if (helmCheck) {
-                            echo "Helm release exists. Upgrading..."
-                            sh "helm upgrade fastapi2 fastapi-helm"
-                        } else {
-                            echo "Helm release not found. Installing..."
-                            sh "helm install fastapi2 fastapi-helm"
-                        }
+                        sh "helm upgrade -i fastapi2 fastapi-helm"
                     }
                     echo 'Helm deployment completed.'
                 }

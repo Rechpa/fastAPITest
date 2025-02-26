@@ -55,8 +55,9 @@ pipeline {
      stage('Deploy with Helm') {
     steps {
         script {
-            echo 'Setting Minikube environment...'
-            sh 'eval $(minikube docker-env)'
+            echo 'Setting up Minikube environment...'
+            sh 'export KUBECONFIG=$HOME/.kube/config'
+            sh 'kubectl config use-context minikube'
 
             echo 'Deploying with Helm...'
             def helmList = sh(script: 'helm list -q | grep "^fastapi2$"', returnStatus: true)
@@ -67,11 +68,10 @@ pipeline {
                 echo "Helm release does not exist. Installing..."
                 sh "helm install fastapi2 fastapi-helm --set image.tag=${IMAGE_TAG}"
             }
-
-            echo 'Helm deployment completed.'
         }
     }
 }
+
 
 
 

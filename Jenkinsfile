@@ -59,7 +59,7 @@ pipeline {
                     echo 'Deploying with Helm...'
 
                     // Fix: Escape $ sign correctly
-                    def helmList = sh(script: "helm list -q | grep '^fastapi2\\$'", returnStatus: true)
+                    def helmList = sh(script: 'helm list -q | grep "^fastapi2\\$"', returnStatus: true)
 
                     if (helmList == 0) {
                         echo "Helm release exists. Upgrading..."

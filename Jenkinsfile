@@ -5,10 +5,9 @@ pipeline {
         SONARQUBE_ENV = 'SonarQube'  // SonarQube environment name
         NEXUS_CREDENTIALS_ID = 'deploymentRepo'  // Nexus credentials ID in Jenkins
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
-        RELEASE_VERSION = "1.0"
         registry = "farahdiouani/gestion-station-ski"
         registryCredential = 'docker-hub-credentials'
-        IMAGE_TAG = "${RELEASE_VERSION}-${env.BUILD_NUMBER}"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
         IMAGE_NAME = "fastapi-postgres-crud"
     }
 

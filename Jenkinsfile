@@ -32,8 +32,8 @@ pipeline {
 
         stage('Login to Docker') {
             steps {
-                echo 'Logging into DockerHub...'
                 script {
+                    echo 'Logging into DockerHub...'
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                         echo 'DockerHub login successful.'
@@ -58,8 +58,8 @@ pipeline {
                 script {
                     echo 'Deploying with Helm...'
 
-                    // Check if the Helm release exists
-                    def helmList = sh(script: "helm list -q | grep '^fastapi2$'", returnStatus: true)
+                    // Fix: Escape $ sign correctly
+                    def helmList = sh(script: "helm list -q | grep '^fastapi2\\$'", returnStatus: true)
 
                     if (helmList == 0) {
                         echo "Helm release exists. Upgrading..."

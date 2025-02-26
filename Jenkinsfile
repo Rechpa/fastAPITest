@@ -24,8 +24,9 @@ pipeline {
             steps {
                 echo 'Building Docker Image...'
                 script {
-                    dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                    echo "Docker image built: ${dockerImage.imageName()}"
+                    // Build Docker image with dynamic tag
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    echo "Docker image built: ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
                 echo 'Docker Build Image stage completed.'
             }

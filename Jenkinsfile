@@ -5,7 +5,6 @@ pipeline {
         registry = "farahdiouani/fastapi-postgres-crud"
         IMAGE_TAG = "${env.BUILD_NUMBER}" // Use Jenkins build number as tag
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
-
     }
 
     stages {
@@ -24,8 +23,8 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image...'
-                    sh "docker build -t ${registry}:${IMAGE_TAG} ." // Uses dynamic build number
-                    sh "docker tag ${registry}:${IMAGE_TAG} ${registry}:latest" // Also tag as latest
+                    sh "docker build -t ${registry}:${IMAGE_TAG} ."
+                    sh "docker tag ${registry}:${IMAGE_TAG} ${registry}:latest"
                     echo "Docker image built: ${registry}:${IMAGE_TAG}"
                 }
             }
@@ -33,14 +32,13 @@ pipeline {
 
         stage('Login to Docker') {
             steps {
-                echo 'Logging to DockerHub...'
+                echo 'Logging into DockerHub...'
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                         echo 'DockerHub login successful.'
                     }
                 }
-                echo 'Login to DockerHub stage completed.'
             }
         }
 
@@ -54,14 +52,35 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy with Helm') {
+            steps {
+                script {
+                    echo 'Deploying with Helm...'
+
+                    // Check if the Helm release exists
+                    def helmList = sh(script: "helm list -q | grep '^fastapi2$'", returnStatus: true)
+
+                    if (helmList == 0) {
+                        echo "Helm release exists. Upgrading..."
+                        sh "helm upgrade fastapi2 fastapi-helm"
+                    } else {
+                        echo "Helm release does not exist. Installing..."
+                        sh "helm install fastapi2 fastapi-helm"
+                    }
+
+                    echo 'Helm deployment completed.'
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'Docker build and push completed successfully!'
+            echo 'Docker build, push, and Helm deployment completed successfully!'
         }
         failure {
-            echo 'Docker build failed!'
+            echo 'Pipeline execution failed!'
         }
     }
 }

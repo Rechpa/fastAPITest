@@ -71,7 +71,7 @@ pipeline {
         script {
             echo 'Cloning the configuration repository...'
             sh 'git clone https://gitlab.com/Rechpa/FastAPIArgo.git'
-            dir('config-repo') {
+            dir('FastAPIArgo') {
                 sh "git config user.email 'farahdiouani3@gmail.com'"
                 sh "git config user.name 'rechpa'"
 

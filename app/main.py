@@ -22,7 +22,7 @@ def get_db():
         
 @app.get("/")
 def read_root():
-    return {"hello":"achref"}
+    return {"hello":"achref :)"}
 
 
 @app.post("/users/", response_model=User)

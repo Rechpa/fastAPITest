@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         registry = "farahdiouani/fastapi-postgres-crud"
-        IMAGE_TAG = "${env.BUILD_NUMBER}" // Use Jenkins build number as tag
+        IMAGE_TAG = "${env.BUILD_NUMBER}" 
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         KUBE_CONFIG = credentials('mykubeconfig') // Kubernetes credentials
     }

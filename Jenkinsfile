@@ -65,6 +65,15 @@ pipeline {
             }
         } 
         */
+        stage('Prepare Environment') {
+    steps {
+        script {
+            sh 'rm -rf FastAPIArgo'  // Delete the previous clone
+        }
+    }
+}
+
+
 
         stage('Update Config Repo') {
     steps {

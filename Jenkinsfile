@@ -65,36 +65,6 @@ pipeline {
             }
         } 
         */
-        stage('Prepare Environment') {
-    steps {
-        script {
-            sh 'rm -rf FastAPIArgo'  // Delete the previous clone
-        }
-    }
-}
-
-
-
-        stage('Update Config Repo') {
-    steps {
-        script {
-            echo 'Cloning the configuration repository...'
-            sh 'git clone https://gitlab.com/Rechpa/FastAPIArgo.git'
-            dir('FastAPIArgo') {
-                sh "git config user.email 'farahdiouani3@gmail.com'"
-                sh "git config user.name 'rechpa'"
-
-                echo 'Updating deployment manifest...'
-                sh "sed -i 's|image: farahdiouani/fastapi-postgres-crud:.*|image: farahdiouani/fastapi-postgres-crud:${IMAGE_TAG}|' fastapi-deployment.yaml"
-
-                echo 'Committing and pushing changes...'
-                sh 'git add .'
-                sh 'git commit -m "Update image to ${IMAGE_TAG}"'
-                sh 'git push https://rechpa:eyladata2025@gitlab.com/Rechpa/FastAPIArgo.git'
-            }
-        }
-    }
-}
 
     }
 

@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: fastapi-postgres-crud:5
-          imagePullPolicy: Never
+          image: farahdiouani/fastapi-postgres-crud:latest  # Use the latest image
+          imagePullPolicy: Always  # Ensure Kubernetes pulls the latest image
           env:
             - name: SQLALCHEMY_DATABASE_URL
               value: "postgresql://postgres:password@postgres:5432/mydatabase"

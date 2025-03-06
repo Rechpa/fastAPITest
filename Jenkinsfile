@@ -52,6 +52,7 @@ pipeline {
             }
         }
 
+        /* 
         stage('Deploy with Helm') {
             steps {
                 script {
@@ -62,7 +63,8 @@ pipeline {
                     echo 'Helm deployment completed.'
                 }
             }
-        }
+        } 
+        */
     }
 
     post {

@@ -18,6 +18,6 @@ spec:
           imagePullPolicy: Never
           env:
             - name: SQLALCHEMY_DATABASE_URL
-              value: "postgresql://postgres:Q156x3QYL0@my-release-postgresql:5432/postgres"
+              value: "postgresql://postgres:prSnRMFQff@my-release-postgresql:5432/postgres"
           ports:
             - containerPort: 80

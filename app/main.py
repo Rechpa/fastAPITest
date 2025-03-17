@@ -12,7 +12,6 @@ from app.crud.user import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-@app.get("/metrics")
 @app.get("/metrics/")  # Handle both with and without trailing slash
 async def metrics():
     return {"message": "Metrics data here"}

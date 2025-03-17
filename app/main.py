@@ -12,6 +12,12 @@ from app.crud.user import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+metrics_app = make_asgi_app()
+app.mount("/metrics", metrics_app)
+
+# Example metrics
+REQUEST_COUNT = Counter("fastapi_requests_total", "Total number of requests")
+REQUEST_LATENCY = Histogram("fastapi_request_latency_seconds", "Request latency in seconds")
 
 # Dependency to get the database session
 def get_db():
@@ -21,14 +27,6 @@ def get_db():
     finally:
         db.close()
         
-# Create a /metrics endpoint for Prometheus
-metrics_app = make_asgi_app()
-app.mount("/metrics", metrics_app)
-
-# Example metrics
-REQUEST_COUNT = Counter("fastapi_requests_total", "Total number of requests")
-REQUEST_LATENCY = Histogram("fastapi_request_latency_seconds", "Request latency in seconds")
-
 @app.get("/")
 async def root():
     REQUEST_COUNT.inc()  # Increment request count

@@ -12,9 +12,8 @@ from app.crud.user import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-@app.get("/metrics/")  # Handle both with and without trailing slash
-async def metrics():
-    return {"message": "Metrics data here"}
+metrics_app = make_asgi_app()
+app.mount("/metrics/", metrics_app)
 
 # Example metrics
 REQUEST_COUNT = Counter("fastapi_requests_total", "Total number of requests")
@@ -28,6 +27,7 @@ def get_db():
     finally:
         db.close()
         
+
 @app.get("/")
 async def root():
     REQUEST_COUNT.inc()  # Increment request count

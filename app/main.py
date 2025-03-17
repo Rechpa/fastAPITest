@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from prometheus_client import make_asgi_app, Counter, Histogram
 from sqlalchemy.orm import Session
 from app import models, schemas
 from app.database.session import SessionLocal, engine, Base
@@ -20,9 +21,19 @@ def get_db():
     finally:
         db.close()
         
+# Create a /metrics endpoint for Prometheus
+metrics_app = make_asgi_app()
+app.mount("/metrics", metrics_app)
+
+# Example metrics
+REQUEST_COUNT = Counter("fastapi_requests_total", "Total number of requests")
+REQUEST_LATENCY = Histogram("fastapi_request_latency_seconds", "Request latency in seconds")
+
 @app.get("/")
-def read_root():
-    return {"hello":"achref :)"}
+async def root():
+    REQUEST_COUNT.inc()  # Increment request count
+    with REQUEST_LATENCY.time():  # Measure latency
+        return {"message": "Hello, achref"}
 
 
 @app.post("/users/", response_model=User)

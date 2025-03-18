@@ -1,0 +1,20 @@
+remoteWrite:
+  - url: "http://vm-victoria-metrics-single-server.default.svc.cluster.local:8428/api/v1/write"
+
+scrape:
+  enabled: true
+
+  extraScrapeConfigs:
+    - job_name: "fastapi-app"
+      scrape_interval: 10s
+      static_configs:
+        - targets: ["192.168.49.2:30317"]
+      metrics_path: "/metrics/"
+
+    - job_name: "node-exporter"
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_endpoints_name]
+          regex: "node-exporter-prometheus-node-exporter"
+          action: keep

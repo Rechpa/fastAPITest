@@ -3,18 +3,10 @@ remoteWrite:
 
 scrape:
   enabled: true
-
   extraScrapeConfigs:
-    - job_name: "fastapi-app"
-      scrape_interval: 10s
+  scrape_configs:
+    - job_name: "fastapi"
+      metrics_path: /metrics
       static_configs:
-        - targets: ["192.168.49.2:30317"]
-      metrics_path: "/metrics/"
+        - targets: ["192.168.49.2:30317"]  # Your FastAPI NodePort IP and Port
 
-    - job_name: "node-exporter"
-      kubernetes_sd_configs:
-        - role: endpoints
-      relabel_configs:
-        - source_labels: [__meta_kubernetes_endpoints_name]
-          regex: "node-exporter-prometheus-node-exporter"
-          action: keep

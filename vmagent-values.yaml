@@ -3,10 +3,7 @@ remoteWrite:
 
 scrape:
   enabled: true
-  extraScrapeConfigs:
   scrape_configs:
     - job_name: "fastapi"
-      metrics_path: /metrics
       static_configs:
-        - targets: ["192.168.49.2:30317"]  # Your FastAPI NodePort IP and Port
-
+        - targets: ["192.168.49.2:30317"]
